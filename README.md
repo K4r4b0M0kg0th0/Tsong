@@ -1,4 +1,4 @@
-# ** Tsong
+# Tsong
 
 Tsong is a simple program that allows you to play, pause, stop, skip, and adjust the volume of audio files in a specified folder. It uses the Pygame library to handle the audio playback and the os module to interact with the file system.
 
