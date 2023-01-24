@@ -9,10 +9,7 @@ pygame.init()
 folder_location = input("Enter the folder location: ")
 
 # Get a list of all the audio files in the folder
-audio_files = []
-for file in os.listdir(folder_location):
-    if file.endswith('.mp3'):
-        audio_files.append(file)
+audio_files = [file for file in os.listdir(folder_location) if file.endswith('.mp3')]
 
 # Set the current track to the first track in the list
 current_track = 0
@@ -38,14 +35,9 @@ while True:
         # Stop the audio file and exit the game loop
         pygame.mixer.music.stop()
         break
-    elif command == 'next':
-        # Go to the next track
-        current_track = (current_track + 1) % len(audio_files)
-        pygame.mixer.music.load(os.path.join(folder_location, audio_files[current_track]))
-        pygame.mixer.music.play()
-    elif command == 'previous':
-        # Go to the previous track
-        current_track = (current_track - 1) % len(audio_files)
+    elif command in ('next', 'previous'):
+        # Go to the next/previous track
+        current_track = (current_track + (-1 if command == 'previous' else 1)) % len(audio_files)
         pygame.mixer.music.load(os.path.join(folder_location, audio_files[current_track]))
         pygame.mixer.music.play()
     elif command == 'current':
@@ -55,11 +47,10 @@ while True:
         # Get the time to skip to from the user
         time = int(input("Enter the time to skip to (in milliseconds): "))
         pygame.mixer.music.set_pos(time)
-    elif command == 'volume up':
-        # Increase the volume
+    elif command in ('volume up', 'volume down'):
+        # Increase/Decrease the volume
         volume = pygame.mixer.music.get_volume()
-        if volume < 1.0:
+        if volume < 1.0 and command == 'volume up':
             pygame.mixer.music.set_volume(volume + 0.1)
-    elif command == 'volume down':
-        # Decrease the volume
-        volume = pygame.mixer.music.get_volume()
+        elif volume > 0.0 and command == 'volume down':
+            pygame.mixer.music.set_volume(volume - 0.1)
