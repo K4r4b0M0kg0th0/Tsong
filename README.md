@@ -1,30 +1,40 @@
 # Tsong
 
-Tsong is a simple program that allows you to play, pause, stop, skip, and adjust the volume of audio files in a specified folder. It uses the Pygame library to handle the audio playback and the os module to interact with the file system.
+Tsong is a simple music player built with Python and Pygame. It allows you to play, pause, stop, skip, and adjust the volume of audio files in a folder.
 
-## Getting Started
-- Clone the repository to your local machine.
+## Prerequisites
 
-- Make sure you have Pygame library installed. If not, you can install it by running pip install pygame
+Python 3.x
+Pygame (can be installed with pip install pygame)
 
-- Run the script by running python Tsong.py
+## Usage
 
-- When prompted, enter the location of the folder containing the audio files you want to play. The program will only play mp3 files.
+- Clone the repository or download the source code.
+- Open a terminal and navigate to the project directory.
+- Run the following command to start the player:
+python tsong.py
 
-Once the first track has been loaded and started playing, you can use the following commands to control the playback:
+- Enter the path to the folder containing the audio files when prompted.
+- Use the following commands to control the player:
 
-play: resume playback
-pause: pause playback
-stop: stop playback and exit the program
-next: skip to the next track
-previous: go back to the previous track
-current: display the name of the current track
-skip: skip to a specific time (in milliseconds)
-volume up: increase the volume
-volume down: decrease the volume
+#### play: Resume playing the current track
+
+#### pause: Pause the current track
+
+#### stop: Stop the player and exit
+
+#### next: Go to the next track
+
+#### previous: Go to the previous track
+
+#### current: Display the name of the current track
+
+#### skip: Skip to a specific time in the current track
+
+#### volume up: Increase the volume
+
+#### volume down: Decrease the volume
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
 
-### Additional help
-Please let me know if you need more help or have any questions about this program.
+This project is licensed under the MIT License. See the LICENSE file for details.
