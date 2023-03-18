@@ -1,40 +1,24 @@
 # Tsong
 
-Tsong is a simple music player built with Python and Pygame. It allows you to play, pause, stop, skip, and adjust the volume of audio files in a folder.
+A simple music player built with Python and Pygame, using a basic GUI created with Tkinter.
 
-## Prerequisites
+Features include:
 
-Python 3.x
-Pygame (can be installed with pip install pygame)
+- Load and play audio files from a user-defined folder
+- Control playback using buttons for play, pause, stop, skip, volume up, volume down
+- Handle errors when loading and playing audio files
+- Navigate between tracks using previous and next buttons
+
+## Requirements
+
+- Python 3.x
+- Pygame library
+- Tkinter library (built-in with Python)
 
 ## Usage
 
-- Clone the repository or download the source code.
-- Open a terminal and navigate to the project directory.
-- Run the following command to start the player:
-python tsong.py
+To start the music player, simply run the script `Tsong.py`. A GUI window will appear that allows you to input the folder path of the audio files, control playback using buttons and navigate between tracks.
 
-- Enter the path to the folder containing the audio files when prompted.
-- Use the following commands to control the player:
+## Credits
 
-#### play: Resume playing the current track
-
-#### pause: Pause the current track
-
-#### stop: Stop the player and exit
-
-#### next: Go to the next track
-
-#### previous: Go to the previous track
-
-#### current: Display the name of the current track
-
-#### skip: Skip to a specific time in the current track
-
-#### volume up: Increase the volume
-
-#### volume down: Decrease the volume
-
-## License
-
-This project is licensed under the MIT License. See the LICENSE file for details.
+This music player was created by [K4r4boM0kg0th0]. The code is based on the Pygame documentation and several online tutorials on using Pygame and Tkinter.
