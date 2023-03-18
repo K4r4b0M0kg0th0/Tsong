@@ -1,50 +1,119 @@
 import pygame
 import os
+from tkinter import *
+from tkinter import ttk
 
-# Initialize pygame
-pygame.init()
+class MusicPlayer:
+    def __init__(self, master):
+        self.master = master
+        master.title("Music Player")
 
-# Define the mapping between user commands and actions
-COMMANDS = {
-    'play': pygame.mixer.music.unpause,
-    'pause': pygame.mixer.music.pause,
-    'stop': pygame.mixer.music.stop,
-    'next': lambda: play_track(current_track + 1),
-    'previous': lambda: play_track(current_track - 1),
-    'current': lambda: print("Current track:", audio_files[current_track]),
-    'skip': lambda: pygame.mixer.music.set_pos(int(input("Enter the time to skip to (in milliseconds): "))),
-    'volume up': lambda: pygame.mixer.music.set_volume(min(pygame.mixer.music.get_volume() + 0.1, 1.0)),
-    'volume down': lambda: pygame.mixer.music.set_volume(max(pygame.mixer.music.get_volume() - 0.1, 0.0))
-}
+        # Initialize Pygame
+        pygame.init()
 
-# Define a function to load and play a track
-def play_track(track_index):
-    global current_track
-    current_track = track_index % len(audio_files)
-    try:
-        pygame.mixer.music.load(os.path.join(folder_location, audio_files[current_track]))
-        pygame.mixer.music.play()
-    except pygame.error:
-        print("Error loading track:", audio_files[current_track])
-        play_track(current_track + 1)
+        # Get the folder location from the user
+        self.folder_location = StringVar(value="")
+        self.folder_entry = ttk.Entry(master, textvariable=self.folder_location)
+        self.folder_entry.grid(row=0, column=0, padx=5, pady=5)
+        self.folder_button = ttk.Button(master, text="Open Folder", command=self.load_audio)
+        self.folder_button.grid(row=0, column=1, padx=5, pady=5)
 
-# Get the folder location from the user
-folder_location = input("Enter the folder location: ")
+        # Set up track navigation buttons
+        self.previous_button = ttk.Button(master, text="<<", command=self.previous_track)
+        self.previous_button.grid(row=2, column=0, padx=5, pady=5)
+        self.next_button = ttk.Button(master, text=">>", command=self.next_track)
+        self.next_button.grid(row=2, column=1, padx=5, pady=5)
 
-# Get a list of all the audio files in the folder
-audio_files = [file for file in os.listdir(folder_location) if file.endswith('.mp3')]
+        # Define the mapping between user commands and actions
+        self.COMMANDS = {
+            'play': self.play,
+            'pause': self.pause,
+            'stop': self.stop,
+            'skip': self.skip,
+            'volume_up': self.volume_up,
+            'volume_down': self.volume_down,
+        }
 
-# Set the current track to the first track in the list and play it
-current_track = 0
-play_track(current_track)
+        # Set up track information and control labels
+        self.current_track_label = ttk.Label(master, text="Currently Playing: None")
+        self.current_track_label.grid(row=1, column=0, padx=5, pady=5)
+        self.playback_label = ttk.Label(master, text="Playback Controls:")
+        self.playback_label.grid(row=3, column=0, padx=5, pady=5)
+        self.play_button = ttk.Button(master, text="Play", command=self.play)
+        self.play_button.grid(row=4, column=0, padx=5, pady=5)
+        self.pause_button = ttk.Button(master, text="Pause", command=self.pause)
+        self.pause_button.grid(row=4, column=1, padx=5, pady=5)
+        self.stop_button = ttk.Button(master, text="Stop", command=self.stop)
+        self.stop_button.grid(row=4, column=2, padx=5, pady=5)
+        self.volume_up_button = ttk.Button(master, text="Volume Up", command=self.volume_up)
+        self.volume_up_button.grid(row=5, column=0, padx=5, pady=5)
+        self.volume_down_button = ttk.Button(master, text="Volume Down", command=self.volume_down)
+        self.volume_down_button.grid(row=5, column=1, padx=5, pady=5)
+        self.skip_button = ttk.Button(master, text="Skip", command=self.skip)
+        self.skip_button.grid(row=5, column=2, padx=5, pady=5)
 
-# Run the game loop
-while True:
-    # Check for user input
-    command = input("Enter a command (play, pause, stop, next, previous, current, skip, volume up, volume down): ")
+        # Set default values for variables
+        self.audio_files = []
+        self.current_track = 0
 
-    # Check if the command is valid and execute the corresponding action
-    if command in COMMANDS:
-        COMMANDS[command]()
-    else:
-        print("Invalid command:", command)
+    def load_audio(self):
+        folder_path = self.folder_location.get()
+        self.audio_files = [file for file in os.listdir(folder_path) if file.endswith('.mp3')]
+        if self.audio_files:
+            self.current_track_label.config(text="Currently Playing: {}".format(self.audio_files[self.current_track]))
+            self.play()
+        else:
+            self.current_track_label.config(text="No audio files found in folder.")
+
+    def play_audio(self, track_index):
+        try:
+            pygame.mixer.music.load(os.path.join(self.folder_location.get(), self.audio_files[track_index]))
+            pygame.mixer.music.play()
+            self.current_track_label.config(text="Currently Playing: {}".format(self.audio_files[track_index]))
+        except pygame.error:
+            print("Error loading track:", self.audio_files[track_index])
+            self.play_audio(track_index + 1)
+
+    def play(self):
+        pygame.mixer.music.unpause()
+
+    def pause(self):
+        pygame.mixer.music.pause()
+
+    def stop(self):
+        pygame.mixer.music.stop()
+
+    def skip(self):
+        time_to_skip = int(input("Enter the time to skip to (in milliseconds): "))
+        pygame.mixer.music.set_pos(time_to_skip)
+
+    def volume_up(self):
+        current_volume = pygame.mixer.music.get_volume()
+        pygame.mixer.music.set_volume(min(current_volume + 0.1, 1.0))
+
+    def volume_down(self):
+        current_volume = pygame.mixer.music.get_volume()
+        pygame.mixer.music.set_volume(max(current_volume - 0.1, 0.0))
+
+    def next_track(self):
+        self.current_track += 1
+        self.play_audio(self.current_track % len(self.audio_files))
+
+    def previous_track(self):
+        self.current_track -= 1
+        self.play_audio(self.current_track % len(self.audio_files))
+
+    def handle_command(self, command_str):
+        command = self.COMMANDS.get(command_str, None)
+        if command:
+            command()
+        else:
+            print("Invalid command:", command_str)
+
+def main():
+    root = Tk()
+    app = MusicPlayer(root)
+    root.mainloop()
+
+if __name__ == "__main__":
+    main()
